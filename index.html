@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sq"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checklista e Umres</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--tx:#1f2430;--mu:#6b7080;--bd:#dcd6c6;--ok:#10B981;--okbg:#e3f6ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161c;--card:#1d2028;--tx:#eceae4;--mu:#9aa0ae;--bd:#343846;--okbg:#12362b}}
+:root[data-theme="dark"]{--bg:#14161c;--card:#1d2028;--tx:#eceae4;--mu:#9aa0ae;--bd:#343846;--okbg:#12362b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,sans-serif}
+.w{max-width:680px;margin:0 auto;padding:0 16px 40px}
+header{padding:20px 0 6px}h1{margin:0;font-size:26px}
+.sum{color:var(--mu);font-size:14px;margin-top:4px}
+.bar{height:8px;background:var(--bd);border-radius:8px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .25s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.cat{border:0;color:#fff;border-radius:18px;padding:18px 10px 14px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:600 15px system-ui,sans-serif;cursor:pointer;text-align:center}
+.cat .ic{font-size:44px;line-height:1}.cat .n{font-weight:700;font-size:14px;margin-top:4px}
+.cat .b{width:80%;height:6px;background:rgba(255,255,255,.35);border-radius:6px;overflow:hidden}.cat .b i{display:block;height:100%;background:#fff}
+.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;padding:12px 0;border-bottom:1px solid var(--bd)}
+.top button{font:inherit;padding:8px 14px;border:1.5px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;cursor:pointer}
+.top h2{margin:10px 0 0;font-size:20px}
+.it{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1.5px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0;cursor:pointer;user-select:none}
+.it .bx{flex:none;width:28px;height:28px;border-radius:8px;border:2px solid var(--bd);background:#fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.it.on{background:var(--okbg);border-color:var(--ok)}.it.on .bx{background:var(--ok);border-color:var(--ok)}
+.it small{display:block;color:var(--mu);font-size:13px}
+.rs{margin-top:24px;text-align:center}.rs button{font:inherit;background:none;border:0;color:var(--mu);text-decoration:underline;cursor:pointer}
+[hidden]{display:none!important}
+</style></head><body><div class="w">
+<header><h1>Checklista e Umres</h1><div class="sum" id="sum"></div><div class="bar"><i id="tb"></i></div></header>
+<div id="home" class="grid"></div>
+<div id="cat" hidden><div class="top"><button id="back">← Kthehu</button><h2 id="ct"></h2><div class="bar"><i id="cb"></i></div></div><div id="items"></div></div>
+<div class="rs"><button id="rs">Fshi të gjitha shënimet</button></div>
+</div>
+<script>
+const C=[
+["Dokumentet e udhëtimit","🛂","#7C3AED",["Pasaporta me vizë","Dëshmi vaksinimi|Certifikata kundër meningitit (A/C/Y/W135); sipas vendit edhe ethja e verdhë dhe poliomieliti","Foto formati pasaportë|Të paktën 4 shtesë","Riyal saudite|Rreth 450 riyal për shpenzimet e para","Para të mjaftueshme|Bëj një buxhet para nisjes; këmbimi në Mekë/Medinë te sarrafët","Kartë debiti/krediti","Numra emergjence|Udhëheqësi i grupit, konsullata","Fotokopje e pasaportës","Bileta të vlefshme","Itinerari i plotë i udhëtimit"]],
+["Namazi & ibadeti","🤲","#0EA5E9",["Kur'an xhepi","Libër duash|Më mirë me përkthim, që të kuptosh çfarë lexon","Listë e duave personale|Për Pejgamberin ﷺ, veten, familjen, umetin, të vdekurit","Tesbih ose numërues dixhital","Tesbih me 7 rruaza|Për numërimin e shavteve të Tavafit dhe Sajit","Sexhade","Busull për kiblen","Udhëzues xhepi i Umres"]],
+["Bagazhi","🧳","#F59E0B",["Valixhe e fortë me çelës|Mesatare (deri 70 cm); jo e butë dhe jo shumë e shtrenjtë","Çelësa e kyçe","Etiketa bagazhi","Çantë shpine e lehtë"]],
+["Veshmbathja & aksesorët","👕","#EC4899",["Ihram x2|Pëlhurë e trashë ose peshqir; merr edhe një palë rezervë","Karfica sigurie për ihramin","Çantë belit ose qafe|Mbaje gjithmonë; kujdes xhepashët","Rroba të gjera e të rehatshme","Papuçe për banjo","Sandale x2|Në ihram kyçet dhe pjesa e sipërme e këmbës mbeten të zbuluara","Atlete","Çantë për këpucët","Xhemper/xhaketë|Nëse udhëton në dimër","Të brendshme","Çorape|Mermeri në Haram mund të jetë shumë i ftohtë","Syze dielli","Kapelë/shami (burra), hixhab (gra)","Çadër e palosshme|E bardhë, pa majë të mprehtë"]],
+["Higjiena","🧼","#14B8A6",["Peshqirë të mëdhenj e të vegjël","Furçë dhëmbësh / misvak","Pastë dhëmbësh pa aromë|Në ihram gjithçka duhet të jetë pa aromë","Shampo/balsam pa aromë","Sapun pa aromë","Letër higjienike / shami xhepi","Letra të lagështa","Dezinfektues duarsh","Krehër/furçë flokësh|Vetëm jashtë ihramit","Makinë ose brisk rroje|Jo në bagazhin e dorës","Deodorant pa aromë","Parfum|Mos e përdor në ihram","Grepa me thithëse|Për të varur ihramin në banjo","Pasqyrë e vogël","Prerës thonjsh|Jo në bagazhin e dorës","Gërshërë e vogël|Jo në bagazhin e dorës","Peceta higjienike","Çantë për higjienën"]],
+["Medikamentet","💊","#EF4444",["Ilaçet e rregullta|P.sh. inhalator, insulinë","Kundër ftohjes dhe gripit","Kundër dhimbjeve","Kundër përgjumjes në udhëtim","Krem lagështues pa aromë","Krem/locion për irritime dhe thembra të plasaritura","Balsam buzësh pa aromë","Pastila/spërkatës për fyt dhe shurup kolle","Vitaminë C","Kundër diarresë","Vazelinë|Kundër fërkimit të kofshëve në ihram","Leukoplaste dhe fasho","Krem mbrojtës nga dielli pa aromë","Pomadë për dhimbje muskujsh","Kripëra rehidratuese|Pyet mjekun nëse ke tension të lartë","Glukozë"]],
+["Elektronika","🔌","#3B82F6",["Adaptor universal prizash","Telefon i zhbllokuar|Shkruaj numrat e grupit, në rast se humbet","Kartelë SIM saudite|Ose përdor WiFi-n e hotelit","Karikues telefoni","Power bank","E-reader / tablet|Opsionale","Kufje","Orë dore","Radio|Për hutben e Arafatit","Orë zgjuese","Elektrik dore / llambë xhepi","Hekur udhëtimi|Vetëm në hotel","Ngrohës uji|Vetëm në hotel","Peshore dixhitale për valixhet","Zgjatues me 4 priza","Ventilator portativ"]],
+["Ditët e Haxhit","⛺","#84CC16",["Dyshek i fryrë|Për Minën dhe Muzdelifen","Thes gjumi","Rrogoz Haxhiu me jastëk","Jastëk i fryrë","Batanije e lehtë / çarçaf","Qeskë për guralecë|Për gjuajtjen e Xhemareve"]],
+["Të tjera","🎒","#78716C",["Stilolaps / marker","Bllok shënimesh","Jastëk për qafë|I dobishëm për udhëtimet e gjata","Tapa veshësh","Maskë për sy|Jo në ihram","Maskë kundër pluhurit","Spango dhe kapëse rrobash","Thikë xhepi|Jo në bagazhin e dorës","Shishe 500 ml për ujë Zemzem","Shishe me spërkatës uji","Ibrik i palosshëm për abdest","Ibrik i palosshëm për istinxha","Ushqime që nuk prishen shpejt","Lëngje / çaj / kafe","Qeska për ushqimet","Shirit ngjitës"]]];
+const K='umre-checklist-v1';let S={};
+try{S=JSON.parse(localStorage.getItem(K)||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const $=i=>document.getElementById(i);
+const cnt=i=>[C[i][3].filter((_,j)=>S[i+'-'+j]).length,C[i][3].length];
+function home(){let a=0,t=0;$('home').innerHTML=C.map((c,i)=>{const[d,n]=cnt(i);a+=d;t+=n;return`<button class="cat" data-i="${i}" style="background:${c[2]}"><span class="ic">${c[1]}</span>${c[0]}<div class="b"><i style="width:${d/n*100}%"></i></div><span class="n">${d} / ${n} të shënuara</span></button>`}).join('');
+ $('sum').textContent=`Gjithsej: ${a} nga ${t} të shënuara`;$('tb').style.width=a/t*100+'%'}
+function show(i){$('home').hidden=$('sum').parentNode.hidden=i!==null;$('cat').hidden=i===null;
+ if(i===null){home();return}
+ $('ct').textContent=C[i][1]+' '+C[i][0];
+ $('items').innerHTML=C[i][3].map((s,j)=>{const[a,b]=s.split('|');return`<div class="it${S[i+'-'+j]?' on':''}" data-j="${j}"><span class="bx">${S[i+'-'+j]?'✓':''}</span><span>${a}${b?`<small>${b}</small>`:''}</span></div>`}).join('');
+ const[d,n]=cnt(i);$('cb').style.width=d/n*100+'%';scrollTo(0,0)}
+let cur=null;
+const go=i=>{cur=i;try{location.hash=i===null?'':'c'+i}catch(e){}show(i)};
+$('home').onclick=e=>{const b=e.target.closest('.cat');if(b)go(+b.dataset.i)};
+$('back').onclick=()=>go(null);
+$('items').onclick=e=>{const r=e.target.closest('.it');if(!r)return;const k=cur+'-'+r.dataset.j;S[k]=!S[k];save();const y=scrollY;show(cur);scrollTo(0,y)};
+$('rs').onclick=()=>{if(confirm('Të fshihen të gjitha shënimet?')){S={};save();show(cur)}};
+try{const h=location.hash.match(/^#c(\d)$/);cur=h&&C[+h[1]]?+h[1]:null}catch(e){}
+show(cur);
+</script></body></html>
